@@ -229,9 +229,9 @@ include Auth0Helper
 
 `app/controllers/dashboard_controller.rb`
 ```
-before_action :authenticate_user!
-
 class DashboardController < ApplicationController
+  before_action :authenticate_user!
+
   def show
     @user = current_user
   end
