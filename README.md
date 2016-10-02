@@ -277,3 +277,10 @@ To make your app work in development:
    # enforce this rule
    config.cache_store = :memory_store
    ```
+
+
+## Final Thoughts
+
+Congratulations, you now have a Rails app that authenticates entirely with JWTS, and violates none of the rails conventions.
+
+In my next post i'll be discussing how to add relationships with users while authenticating with Auth0
