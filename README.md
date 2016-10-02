@@ -1,4 +1,4 @@
-# Auth0 with Rails 5
+# Auth0 with Rails 5 Done Right
 
 The existing documentation at Auth0 is overly simplistic and aims to get you up and running really fast. This tutorial gets you up and running really fast, but while observing all of the usual Rails' conventions.
 
