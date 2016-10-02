@@ -267,7 +267,7 @@ To make your app work in development:
    Rails.application.config.session_store :cache_store
    ```
 
-2. Add this to the very end of the config block in `/config/enviroments/development.rb` so that it overrides all other instances:
+2. Add this to the end of the config block in `/config/enviroments/development.rb` so that it overrides all other instances:
 
    ```
    config.cache_store = :memory_store
