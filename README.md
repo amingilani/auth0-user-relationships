@@ -1,6 +1,16 @@
 # Auth0 Authentication and Database Relationship
 
-This tutorial was for a problem I ran into, and fixed for myself. There were no tutorials that addressed this particular problem, so I made my own. If I could have a conversation with Past Me, it would go something like this:
+This tutorial was for a problem I ran into, and fixed for myself.
+
+> As an application, I should be able to create database
+> relationships between my users and other tables but I can't
+> because I don't have a users table in my database
+
+There were no tutorials that addressed this particular problem, so I made my own.
+
+## How it works
+
+If I could have a conversation with Past Me, it would go something like this:
 
 *How do I create a relationships with my User model, if I don't actually have a User model*  
 Well, make one, dummy!  
@@ -15,10 +25,93 @@ Then you have bigger problems than fetching user information: your users won't b
 *Nevermind, let's get to the tutorial already*  
 Good boy.
 
-## Creating a Rails App
+## Setting up an Auth0 powered Rails App
 
-Do you seriously need instructions for this?
+There's already an Auth0 tutorial on making a Ruby on Rails app, but it skips over a few best practices to keep things simple. I'll walk you through a more powerful initial setup.
+
+### Generating a Rails App
+
+If you're working with rails, you already know this, but I like to keep things complete.
 
 [![asciicast](https://asciinema.org/a/48351.png)](https://asciinema.org/a/48351)
 
-## Setting up Auth0
+### Setting up Gems
+
+We're going to be storing secrets in environment variables, so for dev purposes, we need an extra gem. Add the following to your `Gemfile`:
+
+```ruby
+# Standard Auth0 requirements
+gem 'omniauth', '~> 1.3.1'
+gem 'omniauth-auth0', '~> 1.4.1'
+# Secrets should never be stored in code
+gem 'dotenv-rails', require: 'dotenv/rails-now', group: [:development, :test]
+```
+
+### Gitignore secrets
+
+Add the following to your `.gitignore` and commit this now:
+
+```bash
+# Ignore the environment variables
+.env
+```
+
+### Setup your environment variables
+
+When in development or testing, we want to load secrets from outside version control, so create a `.env` file with the following content:
+
+```
+AUTH0_CLIENT_ID= #INSERT YOUR SECRET HERE
+AUTH0_MANAGEMENT_JWT= #INSERT YOUR SECRET HERE
+AUTH0_DOMAIN= #INSERT YOUR SECRET HERE
+```
+
+### Add to your app secrets
+
+Instead of fetching the secrets directly in your code, fetch them once in the secrets file, where they should be and refer them via this file throughout your code. Make the following changes to your `config/secrets.yml`
+
+```yaml
+# Add this to the top of the file
+default: &default
+  auth0_client_id: <%= ENV['AUTH0_CLIENT_ID'] %>
+  auth0_client_secret: <%= ENV['AUTH0_CLIENT_SECRET'] %>
+  auth0_management_jwt: <%= ENV['AUTH0_MANAGEMENT_JWT'] %>
+  auth0_domain: <%= ENV['AUTH0_DOMAIN'] %>
+
+# Make the rest of your groups inherit from default
+development:
+  <<: *default
+  ...
+
+test:
+  <<: *default
+  ...
+
+# Do not keep production secrets in the repository,
+# instead read values from the environment.
+production:
+  <<: *default
+  ...
+
+```
+
+### Create an initializer
+
+Create `config/initializers/auth0.rb` to configure OmniAuth.
+
+```ruby
+# Configure the middleware
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider(
+    :auth0,
+    Rails.application.secrets.auth0_client_id,
+    Rails.application.secrets.auth0_client_secret,
+    Rails.application.secrets.auth0_domain,
+    callback_path: '/auth/auth0/callback'
+  )
+end
+```
+
+### Generating Pages
+
+We want two pages for our simplistic app, a publicly accessible home page, and a private dashboard
