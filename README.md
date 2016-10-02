@@ -166,8 +166,8 @@ Replace the contents of `app/views/public_pages/home.html.erb`
 <script src="https://cdn.auth0.com/js/lock/10.2/lock.min.js"></script>
 <script>
   var lock = new Auth0Lock(
-    <%= Rails.application.secrets.auth0_client_id %>,
-    <%= Rails.application.secrets.auth0_domain %>, {
+    '<%= Rails.application.secrets.auth0_client_id %>',
+    '<%= Rails.application.secrets.auth0_domain %>', {
     container: 'root',
     auth: {
       redirectUrl: '',
