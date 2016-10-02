@@ -12,7 +12,9 @@ There's already an Auth0 tutorial on making a Ruby on Rails app, but it skips ov
 
 If you're working with rails, you already know this, but I like to keep things complete.
 
-[![asciicast](https://asciinema.org/a/48351.png)](https://asciinema.org/a/48351)
+```bash
+$ rails new auth0_setup --database=postgresql
+```
 
 ### Setting up Gems
 
