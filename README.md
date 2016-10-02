@@ -112,6 +112,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 ```
 
-### Generating Pages
+### Generating Controllers
 
-We want two pages for our simplistic app, a publicly accessible home page, and a private dashboard
+We want two pages for our simplistic app, a publicly accessible contoller home page, and a privately accessible dashboard, as well as a controller without pages for an authentication api:
