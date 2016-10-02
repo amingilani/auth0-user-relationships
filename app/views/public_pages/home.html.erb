@@ -4,11 +4,15 @@
 <script src="https://cdn.auth0.com/js/lock/10.2/lock.min.js"></script>
 <script>
   var lock = new Auth0Lock(
-    <%= Rails.application.secrets.auth0_client_id %>,
-    <%= Rails.application.secrets.auth0_domain %>, {
+    '<%= Rails.application.secrets.auth0_client_id %>',
+    '<%= Rails.application.secrets.auth0_domain %>', {
     container: 'root',
     auth: {
-      redirectUrl: '',
+      <% if Rails.env.production? %>
+      redirectUrl: 'https://shaadiplan.io/auth/auth0/callback',
+      <% else %>
+      redirectUrl: 'http://localhost:3000/auth/auth0/callback',
+      <% end %>
       responseType: 'code',
       params: {
         scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
