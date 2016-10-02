@@ -98,9 +98,9 @@ end
 We want two pages for our simplistic app, a publicly accessible contoller home page, and a privately accessible dashboard, as well as a controller without pages for an authentication api:
 
 ```bash
-$ rails g controller PublicPages home && \
-> rails g controller Dashboard show && \
-> rails g controller auth0 callback failure --skip-template-engine --skip-assets
+rails g controller PublicPages home && \
+rails g controller Dashboard show && \
+rails g controller auth0 callback failure --skip-template-engine --skip-assets
 ```
 
 ### Fixing routes
