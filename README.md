@@ -275,5 +275,6 @@ To make your app work in development:
 2. Add this to the end of the config block in `/config/enviroments/development.rb` so that it overrides all other instances:
 
    ```
+   # enforce this rule
    config.cache_store = :memory_store
    ```
