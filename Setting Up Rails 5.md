@@ -1,29 +1,8 @@
 # Auth0 with Rails 5
 
-This tutorial was for a problem I ran into, and fixed for myself.
+The existing documentation at Auth0 is overly simplistic and aims to get you up and running really fast. This tutorial gets you up and running really fast, but while observing all of the usual Rails' conventions.
 
-> As an application, I should be able to create database
-> relationships between my users and other tables but I can't
-> because I don't have a users table in my database
-
-There were no tutorials that addressed this particular problem, so I made my own.
-
-## How it works
-
-If I could have a conversation with Past Me, it would go something like this:
-
-*How do I create a relationships with my User model, if I don't actually have a User model*  
-Well, make one, dummy!  
-*But the whole point of Auth0 is so that I don't have to manage users myself!*  
-Yes, you don't. But having a User model in your database doesn't mean you're managing Users, or storing information about them -- infact, you don't have to store any information about your users at all, except a unique ID to reference them from Auth0  
-*But then how do I display things like user names and profile information?*  
-Auth0 has an API your server can call upon.  
-*Ohhhh, I see where this is headed.*
-You can fetch and show user information on the fly. It'll always be up to date, and you'll never have to write to your database.
-*Ahhh, but what if Auth0's server fails?*  
-Then you have bigger problems than fetching user information: your users won't be able to login in the first place. Besides, that's a risk you accepted when chose Auth0's convenience over setting up your own authentication service, **and** if you're a hobby dev or small team, do you think your uptime will be better than Authy's?  
-*Nevermind, let's get to the tutorial already*  
-Good boy.
+The Auth0 documentation also contains a few typos that break your code, this (hopefully) doesn't
 
 ## Setting up an Auth0 powered Rails App
 
@@ -142,7 +121,7 @@ get '/auth/failure'        => 'auth0#failure'
 
 Replace the file in `/app/controllers/auth0_controller.rb` with
 
-```
+```ruby
 class Auth0Controller < ApplicationController
   def callback
     # This stores all the user information that came from Auth0
@@ -160,8 +139,136 @@ class Auth0Controller < ApplicationController
 end
 ```
 
+### Add the callback link to Auth0
+
+Auth0 only allows callbacks to a whitelist so specify your callback urls at [Application Settings](https://manage.auth0.com/#/applications):
+
+```
+https://liveapplication.example.com/auth/auth0/callback
+http://localhost:3000/auth/auth0/callback
+```
+
+The second one is to let you develop locally.
+
 ### Creating a login page
 
 Replace the contents of `app/views/public_pages/home.html.erb`
+
+```html
+<div id="root" style="width: 320px; margin: 40px auto; padding: 10px; border-style: dashed; border-width: 1px; box-sizing: border-box;">
+    embedded area
+</div>
+<script src="https://cdn.auth0.com/js/lock/10.2/lock.min.js"></script>
+<script>
+  var lock = new Auth0Lock(
+    <%= Rails.application.secrets.auth0_client_id %>,
+    <%= Rails.application.secrets.auth0_domain %>, {
+    container: 'root',
+    auth: {
+      redirectUrl: '',
+      responseType: 'code',
+      params: {
+        scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+      }
+    }
+  });
+  lock.show();
+</script>
 ```
+
+### An auth0 helper
+
+Coming from using Devise for authentication in Rails, I liked the helpers it gave so let's recreate those. Add the following to `app/helpers/auth0_helper.rb`
+
+```ruby
+module Auth0Helper
+  private
+
+  # Is the user signed in?
+  # @return [Boolean]
+  def user_signed_in?
+    session[:userinfo].present?
+  end
+
+  # Set the @current_user or redirect to public page
+  def authenticate_user!
+    # Redirect to page that has the login here
+    if user_signed_in?
+      @current_user = session[:userinfo].uid
+    else
+      redirect_to login_path
+    end
+  end
+
+  # What's the current_user?
+  # @return [Hash]
+  def current_user
+    @current_user
+  end
+
+  # @return the path to the login page
+  def login_path
+    root_path
+  end
+end
 ```
+
+### Add the helper to ApplicationController
+
+Add this line to your `app/controllers/application_controller.rb` access your helpers in all your controllers
+
+```ruby
+include Auth0Helper
+```
+
+### Showing user info in the dashboard
+
+`app/controllers/dashboard_controller.rb`
+```
+before_action :authenticate_user!
+
+class DashboardController < SecuredController
+  def show
+    @user = current_user
+  end
+end
+```
+
+`app/views/dashboard/show.html.erb`
+```
+<div>
+  <img class="avatar" src="<%= @user[:info][:image] %>"/>
+  <h2>Welcome <%= @user[:info][:name] %></h2>
+</div>
+```
+
+We're done!
+
+### Descriptive Errors
+
+When authentication fails, you want to display the reason for the failure, so add this to your `config/environments/production.rb`
+
+```ruby
+OmniAuth.config.on_failure = Proc.new { |env|
+  message_key = env['omniauth.error.type']
+  error_description = Rack::Utils.escape(env['omniauth.error'].error_message)
+  new_path = "#{env['SCRIPT_NAME']}#{OmniAuth.config.path_prefix}/failure?message=#{message_key}&error_description=#{error_description}"
+  Rack::Response.new(['302 Moved'], 302, 'Location' => new_path).finish
+}
+```
+
+### Overflowing Cookies in Development
+
+To make your app work in development:
+
+1. Add this to `/config/initializers/session_store.rb`
+
+   ```
+   Rails.application.config.session_store :cache_store
+   ```
+
+2. Add this to the very end of the config block in `/config/enviroments/development.rb` so that it overrides all other instances:
+
+   ```
+   config.cache_store = :memory_store
+   ```
