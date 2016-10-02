@@ -232,7 +232,7 @@ include Auth0Helper
 ```
 before_action :authenticate_user!
 
-class DashboardController < SecuredController
+class DashboardController < ApplicationController
   def show
     @user = current_user
   end
