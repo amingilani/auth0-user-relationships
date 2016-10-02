@@ -1,4 +1,4 @@
-# Auth0 Authentication and Database Relationship
+# Auth0 with Rails 5
 
 This tutorial was for a problem I ran into, and fixed for myself.
 
@@ -115,3 +115,53 @@ end
 ### Generating Controllers
 
 We want two pages for our simplistic app, a publicly accessible contoller home page, and a privately accessible dashboard, as well as a controller without pages for an authentication api:
+
+```bash
+$ rails g controller PublicPages home && \
+> rails g controller Dashboard show && \
+> rails g controller auth0 callback failure --skip-template-engine --skip-assets
+```
+
+### Fixing routes
+
+We want to route all the get requests to our controllers and actions
+
+```ruby
+# home page
+root 'public_pages#home'
+
+# Dashboard
+get 'dashboard' => 'dashboard#show'
+
+# Auth0 routes for authentication
+get '/auth/auth0/callback' => 'auth0#callback'
+get '/auth/failure'        => 'auth0#failure'
+```
+
+### Setup the Auth0 Controller
+
+Replace the file in `/app/controllers/auth0_controller.rb` with
+
+```
+class Auth0Controller < ApplicationController
+  def callback
+    # This stores all the user information that came from Auth0
+    # and the IdP
+    session[:userinfo] = request.env['omniauth.auth']
+
+    # Redirect to the URL you want after successful auth
+    redirect_to '/dashboard'
+  end
+
+  def failure
+    # show a failure page or redirect to an error page
+    @error_msg = request.params['message']
+  end
+end
+```
+
+### Creating a login page
+
+Replace the contents of `app/views/public_pages/home.html.erb`
+```
+```
