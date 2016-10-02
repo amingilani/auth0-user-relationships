@@ -1,4 +1,4 @@
-# Creating Sane Web Apps with Rails and Auth0
+# Auth0 Authentication and Database Relationship
 
 This tutorial was for a problem I ran into, and fixed for myself. There were no tutorials that addressed this particular problem, so I made my own. If I could have a conversation with Past Me, it would go something like this:
 
@@ -19,4 +19,6 @@ Good boy.
 
 Do you seriously need instructions for this?
 
-`rails new `
+[![asciicast](https://asciinema.org/a/48351.png)](https://asciinema.org/a/48351)
+
+## Setting up Auth0
