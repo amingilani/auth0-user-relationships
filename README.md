@@ -103,6 +103,9 @@ rails g controller Dashboard show && \
 rails g controller auth0 callback failure --skip-template-engine --skip-assets
 ```
 
+Troubleshoot:
+If you get errors, you should probably setup your db with `rails db:setup && rails db:migrate`
+
 ### Fixing routes
 
 We want to route all the get requests to our controllers and actions
