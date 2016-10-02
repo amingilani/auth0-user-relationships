@@ -43,7 +43,7 @@ When in development or testing, we want to load secrets from outside version con
 
 ```
 AUTH0_CLIENT_ID= #INSERT YOUR SECRET HERE
-AUTH0_MANAGEMENT_JWT= #INSERT YOUR SECRET HERE
+AUTH0_CLIENT_SECRET= #INSERT YOUR SECRET HERE
 AUTH0_DOMAIN= #INSERT YOUR SECRET HERE
 ```
 
@@ -56,7 +56,6 @@ Instead of fetching the secrets directly in your code, fetch them once in the se
 default: &default
   auth0_client_id: <%= ENV['AUTH0_CLIENT_ID'] %>
   auth0_client_secret: <%= ENV['AUTH0_CLIENT_SECRET'] %>
-  auth0_management_jwt: <%= ENV['AUTH0_MANAGEMENT_JWT'] %>
   auth0_domain: <%= ENV['AUTH0_DOMAIN'] %>
 
 # Make the rest of your groups inherit from default
