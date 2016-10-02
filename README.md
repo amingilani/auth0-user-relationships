@@ -198,7 +198,7 @@ module Auth0Helper
   def authenticate_user!
     # Redirect to page that has the login here
     if user_signed_in?
-      @current_user = session[:userinfo].uid
+      @current_user = session[:userinfo]
     else
       redirect_to login_path
     end
