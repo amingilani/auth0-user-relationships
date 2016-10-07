@@ -56,7 +56,7 @@ Auth0 uses JWTs as API tokens. To be able to read your User's from the Managemen
 Add the following line to your `.env` file
 
 ```bash
-AUTH0_MANAGEMENT_JWT= # Add your token here
+AUTH0_MANAGEMENT_JWT= # INSERT YOUR TOKEN HERE
 ```
 
 ### Add the token to your secrets
