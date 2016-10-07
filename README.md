@@ -34,10 +34,13 @@ Here's what we need to do:
 3. Extend `User` with a method that allows you to access the user data
 4. Extend the `Auth0Helper` to save and return the `User` to our `current_user` helper
 
+## Add things to the User model
+
 ### Generate a User Model
 
 Generate a User model with an indexed string called `auth0_uid`
 
 ```
-rails g model user auth0_uid:string:index
+rails g model user auth0_uid:string:index && \
+rails db:migrate
 ```
