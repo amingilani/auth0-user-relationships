@@ -47,7 +47,7 @@ AUTH0_CLIENT_SECRET= #INSERT YOUR SECRET HERE
 AUTH0_DOMAIN= #INSERT YOUR SECRET HERE
 ```
 
-### Add to your app secrets
+### Setup app secrets
 
 Instead of fetching the secrets directly in your code, fetch them once in the secrets file, where they should be and refer them via this file throughout your code. Make the following changes to your `config/secrets.yml`
 
@@ -281,6 +281,6 @@ To make your app work in development:
 
 ## Final Thoughts
 
-Congratulations, you now have a Rails app that authenticates entirely with JWTS, and violates none of the rails conventions.
+Congratulations, you now have a Rails app that authenticates entirely with JWTs, and violates none of the rails conventions.
 
 In my next post i'll be discussing how to add relationships with users while authenticating with Auth0
