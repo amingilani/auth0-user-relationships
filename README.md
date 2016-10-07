@@ -40,6 +40,10 @@ Here's what we need to do:
 3. Extend `User` with a method that allows you to access the user data
 4. Extend the `Auth0Helper` to save and return the `User` to our `current_user` helper
 
+### Creating a new app
+
+Please refer to my Auth0 and Rails 5 [starter app](https://github.com/amingilani/auth0-rail5), which this project is a fork of. It's different from (better than) the Auth0 Rails documentation on a Rails 4 app and keeps to The Rails Way, throughout. 
+
 ### Add the Auth0 Gem
 
 Add the following line to your `Gemfile` and run `bundle`:
