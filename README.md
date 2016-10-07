@@ -22,7 +22,7 @@ Yes, you don't. But having a User model in your database doesn't mean you're man
 *But then how do I display things like user names and profile information?*  
 Auth0 has an API your server can call upon.
 
-*Ohhhh, I see where this is headed.*
+*Ohhhh, I see where this is headed.*  
 You can fetch and show user information on the fly. It'll always be up to date, and you'll never have to write to your database.
 
 *Ahhh, but what if Auth0's server fails?*  
