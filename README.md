@@ -88,8 +88,6 @@ We want a method to run in `initialize` and to load the user information into an
 class User < ApplicationRecord
   after_initialize :set_instance_variables
 
-  ...
-
   private
 
   def set_instance_variables
