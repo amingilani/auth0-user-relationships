@@ -146,12 +146,17 @@ end
 Update the dashboard view at `app/views/dashboard/show.html.erb`
 
 ```
-<h2>Welcome <%= @user.info :name %></h2>
+<div>
+  <img class="avatar" src="<%= @user.info :picture %>"/>
+  <h2>Welcome <%= @user.info :name %></h2>
+</div>
 ```
 
 ### Read the Docs
 
-You'll find the entire schema at for the Auth0 API response in the docs for the [User](https://auth0.com/docs/api/management/v2#!/Users/get_users) resource
+Did you notice that instead of calling `:image`, we called `:picture` for the user's profile image?
+
+You'll find the entire schema at for the Auth0 API response in the docs for the [User](https://auth0.com/docs/api/management/v2#!/Users/get_users) resource.
 
 
 ## Next steps
