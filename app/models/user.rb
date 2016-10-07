@@ -8,7 +8,7 @@ class User < ApplicationRecord
   private
 
   def set_instance_variables
-    @user ||= auth0_api.user auth0_id
+    @user ||= auth0_api.user auth0_uid
   end
 
   def auth0_api

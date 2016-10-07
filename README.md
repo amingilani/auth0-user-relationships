@@ -91,7 +91,7 @@ class User < ApplicationRecord
   private
 
   def set_instance_variables
-    @user ||= auth0_api.user auth0_id
+    @user ||= auth0_api.user auth0_uid
   end
 
   def auth0_api
@@ -128,12 +128,12 @@ end
 
 Update the helper to set `@current_user` with a `User` instance:
 
-```
+```ruby
 def authenticate_user!
   # Redirect to page that has the login here
   if user_signed_in?
     @current_user = User.find_or_create_by(
-      auth0_id: session[:userinfo].uid
+      auth0_uid: session[:userinfo].uid
     )
   else
     redirect_to root_path
