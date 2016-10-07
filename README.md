@@ -138,7 +138,8 @@ class Auth0Controller < ApplicationController
 
   def failure
     # show a failure page or redirect to an error page
-    @error_msg = request.params['message']
+    @error_type = request.params['error_type']
+    @error_msg = request.params['error_msg']
   end
 end
 ```
@@ -250,13 +251,13 @@ We're done!
 
 ### Descriptive Errors
 
-When authentication fails, you want to display the reason for the failure, so add this to your `config/environments/production.rb`
+When authentication fails, you want to display the reason for the failure, so add this to your `config/initializers/omniauth.rb`
 
 ```ruby
 OmniAuth.config.on_failure = Proc.new { |env|
   message_key = env['omniauth.error.type']
   error_description = Rack::Utils.escape(env['omniauth.error'].error_message)
-  new_path = "#{env['SCRIPT_NAME']}#{OmniAuth.config.path_prefix}/failure?message=#{message_key}&error_description=#{error_description}"
+  new_path = "#{env['SCRIPT_NAME']}#{OmniAuth.config.path_prefix}/failure?error_type=#{message_key}&error_msg=#{error_description}"
   Rack::Response.new(['302 Moved'], 302, 'Location' => new_path).finish
 }
 ```
