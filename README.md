@@ -48,7 +48,7 @@ Add the following line to your `Gemfile` and run `bundle`:
 gem 'auth0'
 ```
 
-### Generate an Management API token
+### Generate a Management API token
 
 Auth0 uses JWTs as API tokens. To be able to read your User's from the Management API:
 
