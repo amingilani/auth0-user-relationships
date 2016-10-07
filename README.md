@@ -26,7 +26,7 @@ Auth0 has an API your server can call upon.
 You can fetch and show user information on the fly. It'll always be up to date, and you'll never have to write to your database.
 
 *Ahhh, but what if Auth0's server fails?*  
-Then you have bigger problems than fetching user information: your users won't be able to login in the first place. Besides, that's a risk you accepted when chose Auth0's convenience over setting up your own authentication service, **and** if you're a hobby dev or small team, do you think your uptime will be better than Authy's?
+Then you have bigger problems than fetching user information: your users won't be able to login in the first place.
 
 *Nevermind, let's get to the tutorial already*  
 Good boy.
